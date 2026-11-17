@@ -9,7 +9,7 @@ the results in an interactive dashboard.
 ```
 art-supply-price-lk/
 ├── README.md                  ← this file
-├── AI_USAGE.md                ← declaration of AI-tool use (required by lecturer)
+├── AI_USAGE.md                ← declaration of AI-tool use
 ├── requirements.txt           ← Python libraries
 ├── data_collection/
 │   ├── scraper.py             ← collects product data from the shops
