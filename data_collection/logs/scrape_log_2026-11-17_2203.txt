@@ -1,0 +1,62 @@
+[22:03:29] Run started. max_pages=all, delay=2.0s
+[22:03:29] === haanz.lk (woocommerce) ===
+[22:03:32] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=1 -> 200
+[22:03:34]   haanz.lk: shop reports 1003 products
+[22:03:34]   page 1: +100 products (total 100)
+[22:03:37] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=2 -> 200
+[22:03:39]   page 2: +100 products (total 200)
+[22:03:43] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=3 -> 200
+[22:03:45]   page 3: +100 products (total 300)
+[22:03:48] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=4 -> 200
+[22:03:50]   page 4: +100 products (total 400)
+[22:03:53] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=5 -> 200
+[22:03:55]   page 5: +100 products (total 500)
+[22:03:59] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=6 -> 200
+[22:04:01]   page 6: +100 products (total 600)
+[22:04:04] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=7 -> 200
+[22:04:06]   page 7: +100 products (total 700)
+[22:04:09] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=8 -> 200
+[22:04:11]   page 8: +100 products (total 800)
+[22:04:14] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=9 -> 200
+[22:04:16]   page 9: +100 products (total 900)
+[22:04:19] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=10 -> 200
+[22:04:21]   page 10: +100 products (total 1000)
+[22:04:24] GET https://www.haanz.lk/wp-json/wc/store/v1/products?per_page=100&page=11 -> 200
+[22:04:26]   page 11: +3 products (total 1003)
+[22:04:26] === shanscraftsstore.com (woocommerce) ===
+[22:04:28] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=1 -> 200
+[22:04:30]   shanscraftsstore.com: shop reports 1023 products
+[22:04:30]   page 1: +100 products (total 100)
+[22:04:34] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=2 -> 200
+[22:04:36]   page 2: +100 products (total 200)
+[22:04:38] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=3 -> 200
+[22:04:40]   page 3: +100 products (total 300)
+[22:04:43] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=4 -> 200
+[22:04:45]   page 4: +100 products (total 400)
+[22:04:47] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=5 -> 200
+[22:04:49]   page 5: +100 products (total 500)
+[22:04:51] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=6 -> 200
+[22:04:53]   page 6: +100 products (total 600)
+[22:04:55] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=7 -> 200
+[22:04:57]   page 7: +100 products (total 700)
+[22:05:00] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=8 -> 200
+[22:05:02]   page 8: +100 products (total 800)
+[22:05:05] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=9 -> 200
+[22:05:07]   page 9: +100 products (total 900)
+[22:05:09] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=10 -> 200
+[22:05:11]   page 10: +100 products (total 1000)
+[22:05:13] GET https://shanscraftsstore.com/wp-json/wc/store/v1/products?per_page=100&page=11 -> 200
+[22:05:15]   page 11: +23 products (total 1023)
+[22:05:15] === jencilstore.com (woocommerce) ===
+[22:05:18] GET https://jencilstore.com/wp-json/wc/store/v1/products?per_page=100&page=1 -> 200
+[22:05:20]   jencilstore.com: shop reports 155 products
+[22:05:20]   page 1: +100 products (total 100)
+[22:05:21] GET https://jencilstore.com/wp-json/wc/store/v1/products?per_page=100&page=2 -> 200
+[22:05:23]   page 2: +55 products (total 155)
+[22:05:23] === Summary ===
+[22:05:23]   haanz.lk                   1003 products
+[22:05:23]   shanscraftsstore.com       1023 products
+[22:05:23]   jencilstore.com             155 products
+[22:05:23]   TOTAL                      2181 products
+[22:05:23] CSV saved to: C:\Users\nisha\OneDrive\Documents\University\L4S1\Machine Learning & Pattern Recognition\Assignment 01\art-supply-price-lk\data\raw\art_supplies_raw_2026-11-17_2203.csv
+[22:05:23] Log saved to: C:\Users\nisha\OneDrive\Documents\University\L4S1\Machine Learning & Pattern Recognition\Assignment 01\art-supply-price-lk\data_collection\logs\scrape_log_2026-11-17_2203.txt
