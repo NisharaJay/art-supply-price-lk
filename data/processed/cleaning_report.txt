@@ -1,0 +1,71 @@
+Input: art_supplies_raw_2026-11-17_2203.csv
+Raw rows: 2181
+
+Removed    6 rows: price missing or Rs. 0
+Removed    1 rows: gift vouchers (not a product)
+Removed  194 rows: exact duplicates (same shop + same name + same price), e.g. colour variants; kept once so they don't leak between train and test
+Removed  590 rows: craft / stationery items, not art supplies (list: excluded_craft_items.csv)
+Rows after cleaning (art supplies only): 1390
+
+Category groups:
+category_group
+Pencils, Charcoal & Pastels    262
+Brushes                        156
+Tools & Accessories            153
+Acrylic Paint                  140
+Pens & Markers                 129
+Fabric & Glass Paint           105
+Paper & Canvas                  88
+Watercolour & Gouache           82
+Oil Paint                       75
+Other Art Supplies              67
+Mediums & Varnishes             56
+Poster & Tempera Paint          53
+Clay & Sculpting                24
+
+Brand identified for 62.4% of products (shop field alone: ~6%)
+brand_grouped
+Unknown            523
+Mont Marte         158
+Art Rangers         76
+Camlin (Camel)      74
+Pentel              72
+Other brand         64
+Marie's             63
+Bomeijia            57
+Fevicryl            43
+Art Nation          37
+Sakura              32
+Apple (brushes)     30
+Macron              29
+Faber-Castell       21
+Staedtler           20
+Fabriano            20
+Nyoni               20
+Uni                 18
+Flash               13
+Fujin               10
+Tombow              10
+
+Size features found (number of products):
+  volume_ml    317
+  weight_g     20
+  paper_gsm    73
+  paper_size   102
+  pack_count>1 216
+
+Grade:
+grade
+Unspecified     1306
+Professional      74
+Student/Kids      10
+
+Price (Rs.) by site:
+                      count    mean     std   min    25%     50%     75%      max
+site                                                                             
+haanz.lk              698.0  1366.0  1992.0  25.0  422.0   720.0  1522.0  19500.0
+jencilstore.com       154.0  2335.0  4267.0  80.0  692.0  1350.0  2275.0  42500.0
+shanscraftsstore.com  538.0  1483.0  1957.0  20.0  350.0   850.0  1838.0  18500.0
+
+
+Saved: data\processed\art_supplies_clean.csv
