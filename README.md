@@ -3,7 +3,7 @@
 What drives the prices of art supplies in Sri Lanka? This project predicts and explains them using
 **bagging, boosting, stacking** and a **Random Forest + ANN hybrid**, with an interactive dashboard.
 
-**Live dashboard:** 
+**Live dashboard:** https://art-supply-price-lk.streamlit.app
 
 ## Data
 - **Source:** public product listings from 3 Sri Lankan online art shops: haanz.lk, shanscraftsstore.com, jencilstore.com (3 other shops were excluded. Two do not allow their data to be used for AI training and one blocked automated access)  
