@@ -58,5 +58,5 @@
 [22:05:23]   shanscraftsstore.com       1023 products
 [22:05:23]   jencilstore.com             155 products
 [22:05:23]   TOTAL                      2181 products
-[22:05:23] CSV saved to: C:\Users\nisha\OneDrive\Documents\University\L4S1\Machine Learning & Pattern Recognition\Assignment 01\art-supply-price-lk\data\raw\art_supplies_raw_2026-11-17_2203.csv
-[22:05:23] Log saved to: C:\Users\nisha\OneDrive\Documents\University\L4S1\Machine Learning & Pattern Recognition\Assignment 01\art-supply-price-lk\data_collection\logs\scrape_log_2026-11-17_2203.txt
+[22:05:23] CSV saved to: data\raw\art_supplies_raw_2026-11-17_2203.csv
+[22:05:23] Log saved to: data_collection\logs\scrape_log_2026-11-17_2203.txt

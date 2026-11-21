@@ -1,0 +1,13 @@
+Model,Type,Train R2,Test R2,CV R2,RMSE (log),MAE (Rs.),Time (s)
+Stacking (RF+XGB+Cat),Stacking,0.83,0.572,0.578,0.721,592.567,12.994
+XGBoost,Boosting,0.831,0.57,0.584,0.723,597.191,0.9
+CatBoost,Boosting,0.764,0.558,0.575,0.733,617.899,1.033
+Hybrid RF + ANN,Hybrid,,0.542,,0.746,611.972,
+LightGBM,Boosting,0.804,0.536,0.544,0.751,621.545,2.338
+Bagging (Trees),Bagging,0.888,0.534,0.557,0.753,593.488,6.505
+Random Forest,Bagging,0.887,0.529,0.556,0.757,598.112,1.168
+ANN (MLP),Neural Net,0.744,0.484,0.484,0.792,695.707,3.431
+Gradient Boosting,Boosting,0.631,0.466,0.52,0.805,696.088,0.106
+Decision Tree,Baseline,0.928,0.33,0.336,0.902,803.86,0.056
+AdaBoost,Boosting,0.4,0.296,0.291,0.925,838.336,0.172
+Linear Regression,Baseline,0.448,0.296,0.371,0.925,907.683,0.058

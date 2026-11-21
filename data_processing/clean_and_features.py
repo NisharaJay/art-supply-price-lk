@@ -1,14 +1,7 @@
 """
 Clean the raw scraped data and build model features.
 
-AI-usage declaration:
-    Written with the help of Claude. Reviewed and run by me.
-
-Input : data/raw/art_supplies_raw_*.csv  
-Output: data/processed/art_supplies_clean.csv
-        data/processed/cleaning_report.txt
-
-Run:  py clean_and_features.py
+AI-assisted: written with the help of Claude. See AI_USAGE.md.
 """
 
 import re
@@ -30,7 +23,13 @@ CRAFT_NAME_PATTERN = (
     r"album|eyelet|brads?\b|pipe cleaner|popsicle|plastic eyes|wax seal|face ?paint|embossing|"
     r"ink blending|napkin|glue gun|drill|bbq|wooden (?:letter|shape|peg)|keychain|earring|coaster|"
     r"photo frame|sticker|tissue paper|quilling|craft kit|mathematical|cleaner|heat ?gun|dig & discover|"
-    r"diamond painting|tape runner|glue applicator|silicone cup"
+    r"diamond painting|tape runner|glue applicator|silicone cup|"
+    # general stationery / office items (not art supplies)
+    r"velcro|glue dots|(?<!masking )\btape\b|(?<!leafing )\bglue\b|b6000|jewell?ery|lcd writing|"
+    r"stationa?ry kit|white ?board|ballpoint|ener ?gel|\bgel pen|pen gift box|rust off|"
+    # papercraft / sewing tools
+    r"dye spray|spray shiny|corner rounder|scoreboard|emboss tool|hole cutter|letter cutter|heat erasable|"
+    r"clear block|bendy rubber pencil"
 )
 ART_NAME_PATTERN = (
     r"paint|brush|canvas|sketch|pencil|charcoal|pastel|easel|palett?e|water ?colou?r|acrylic|"
@@ -65,8 +64,11 @@ def is_craft(name, categories):
 CATEGORY_RULES = [
     ("Brushes",                   r"brush"),                                  
     ("Pens & Markers",            r"\bpens?\b|marker(?!\s*pad)|liner|\bink\b|calligraph|posca|micron"),
-    ("Pencils, Charcoal & Pastels", r"pencil|charcoal|pastel(?!\s*paint)|crayon|graphite"),
-    ("Mediums & Varnishes",       r"medium|varnish|gesso|fixative|modell?ing paste|linseed|turpentine"),
+    ("Pencils, Charcoal & Pastels", r"pencil|charcoal|pastel(?!\s*paint)|crayon|graphite|\bleads?\b"),
+    # "medium" but not colour names like "Medium Yellow" / "Red Medium" or sizes like "Small/Medium"
+    ("Mediums & Varnishes",       r"(?<!yellow )(?<!red )(?<!/)\bmediums?\b(?! yellow| red| blue| green)|"
+                                  r"varnish|gesso|fixative|modell?ing paste|linseed|linceed|turpentine|"
+                                  r"drying oil|silicone? oil"),
     ("Fabric & Glass Paint",      r"fabric|glass|ceramic"),
     ("Oil Paint",                 r"\boil\b"),
     ("Watercolour & Gouache",     r"water ?colou?r|gouache"),
@@ -88,16 +90,16 @@ BRAND_RULES = [
     (r"art ?nation", "Art Nation"),
     (r"marie[’']?s|\bmaries\b", "Marie's"),
     (r"fevicryl", "Fevicryl"),
-    (r"faber[ -]?castell", "Faber-Castell"),
+    (r"faber[ -]?cast(?:el|le)", "Faber-Castell"),   # also "Faber Castle"
     (r"fabriano", "Fabriano"),
-    (r"pentel", "Pentel"),
+    (r"pent[ae]l", "Pentel"),                      # "Pental" is a common misspelling
     (r"sakura|pigma|micron", "Sakura"),
     (r"camlin|camel|fabrica", "Camlin (Camel)"),
     (r"bomeijia", "Bomeijia"),
-    (r"staedtler", "Staedtler"),
+    (r"sta?edtler|steadtler", "Staedtler"),        # also "Steadtler"
     (r"tombow?\b", "Tombow"),
     (r"posca|\buni\b", "Uni"),
-    (r"prismacolor", "Prismacolor"),
+    (r"prisma ?colou?r", "Prismacolor"),          # also "Prisma Colour"
     (r"giorgione", "Giorgione"),
     (r"rotring", "Rotring"),
     (r"nyoni", "Nyoni"),
@@ -106,19 +108,59 @@ BRAND_RULES = [
     (r"winsor|newton", "Winsor & Newton"),
     (r"\breeves\b", "Reeves"),
     (r"derwent", "Derwent"),
-    (r"talens|rembrandt|van gogh", "Royal Talens"),
+    (r"talens|rembrandt|van gogh|art creation", "Royal Talens"),
     (r"superior", "Superior"),
-    (r"keep smiling", "Keep Smiling"),
+    (r"keep ?smil", "Keep Smiling"),               # also "KeepSmiling", "Keep Smilling"
+    (r"\bdoms\b", "DOMS"),
+    (r"crimto", "Crimto"),
+    (r"\bacron\b", "Acron"),
+    (r"worison", "Worison"),
+    (r"conqueror", "Conqueror"),
+    (r"artline", "Artline"),
+    (r"monami", "Monami"),
+    (r"\bsapri\b", "Sapri"),
+    (r"sea ?king", "SeaKing"),
+    (r"pebeo", "Pebeo"),
+    (r"mungyo", "Mungyo"),
+    (r"bomega", "Bomega"),
+    (r"tenwin", "Tenwin"),
+    (r"hauser", "Hauser"),
+    (r"lakaruchi", "Lakaruchi"),
+    (r"\btinto\b", "Tinto"),
+    (r"\blantu\b", "Lantu"),
     (r"stabilo", "Stabilo"),
     (r"nataraj", "Nataraj"),
-    (r"\bapple\b", "Apple (brushes)"),
+    (r"\bapple\b(?! green)", "Apple (brushes)"),   # not the colour "Apple green"
     (r"\bflash\b", "Flash"),
     (r"hobby ?craft", "Hobby Craft"),
 ]
 MIN_BRAND_COUNT = 10   # brands with fewer products are grouped as "Other brand"
 
 
-def find_category(text):
+# The product NAME is checked first for these, because shop categories can mislead
+# (e.g. "Drawing Papers For Watercolours" is paper, not watercolour paint).
+NAME_FIRST_RULES = [
+    ("Pens & Markers",        r"(?<!water)(?<!water )brush ?pens?|brush tip|marker(?!\s*pad)"),  # brush pens
+    ("Pencils, Charcoal & Pastels", r"colou?r pencils|sketching set"),  # pencil sets that come "+ sharpener"
+    ("Tools & Accessories",   r"brush (?:pouch|bucket|holder|storage)|brush pouch|easel|drawing board|"
+                              r"tote board|carry board|clip ?board|cutter|trimmer|stump|palett?e|"
+                              r"pall?ete?\b|sand ?paper|knife|knives|painting plate|mixing (?:pot|tray|plate)|"
+                              r"sharpener|shapner|eraser|\btools?\b"),
+    ("Brushes",               r"brush"),
+    ("Acrylic Paint",         r"acrylic.*pastel|pastel.*acrylic|art rangers? 75ml"),  # pastel-coloured acrylics
+    ("Mediums & Varnishes",   r"fixative|varnish"),
+    ("Fabric & Glass Paint",  r"fabric paint|glass colou?rs?|glass paint|dimentional fabric|dye sticks"),
+    ("Clay & Sculpting",      r"\bclay\b|manikin"),
+    ("Watercolour & Gouache", r"gouache"),
+    ("Poster & Tempera Paint", r"poster colou?r"),
+    ("Paper & Canvas",        r"\bpapers?\b|\bpads?\b|canvas|sketch ?book|drawing book|art board|dessin|disegno"),
+]
+
+
+def find_category(name, text):
+    for group, pattern in NAME_FIRST_RULES:
+        if re.search(pattern, name):
+            return group
     for group, pattern in CATEGORY_RULES:
         if re.search(pattern, text):
             return group
@@ -152,9 +194,17 @@ def extract_weight_g(text):
 def extract_pack_count(text):
     """How many items in the product, e.g. '12 colours', '5pcs', 'set of 24', '72 set'."""
     patterns = [
+        r"(\d+)\s*[x×*]\s*\d+(?:\.\d+)?\s*(?:ml|g)\b",    # "24X12ml", "12x10g" -> 24, 12
+        r"\d+(?:\.\d+)?\s*(?:ml|g)\s*[x×*]\s*(\d+)",      # "75ml*6"              -> 6
+        r"\d+\s*ml\s*/\s*(\d+)\s*(?:tubes|colou?rs|pcs)",  # "12ml/24 tubes" -> 24 (not "180ml/300ml")
         r"set of (\d+)",
-        r"(\d+)\s*-?\s*(?:pcs|pc|pieces|colou?rs|shades|sheets|sticks|pens|pencils|brushes|markers)\b",
+        r"(\d+)\s*-?\s*(?:pcs|pc|pieces|colou?rs?|shades?|sheets|sticks|pens|pencils|brushes|markers|"
+        r"tubes|cakes|clrs|crayons|nibs?|leads|pages|pgs)\b",               # "24 Tubes", "-36Clrs", "9 Nibs"
+        r"(\d+)\s*/\s*\d+\s*ml",                                              # "12/20ml" = 12 tubes of 20ml
         r"(\d+)\s*(?:set|pack)\b",
+        # number at the end of a colour-set name, e.g. "Oil pastel -50", "Colour pencils 24"
+        r"(?:pencils?|pastels?|watercolou?rs?|water colou?rs?|crayons|colou?rs?|cakes|tubes|paints?)"
+        r"\s*(?:set|pack)?\s*[-–]?\s*(\d{1,3})(?![\d.]|\s*(?:ml|mm|g\b|cm|b\b|h\b|x|pc))",
     ]
     for p in patterns:
         m = re.search(p, text)
@@ -200,15 +250,22 @@ def main():
     name = df["name"].str.lower()
     text = (df["name"].fillna("") + " " + df["categories"].fillna("")).str.lower()
 
-    df["category_group"] = text.apply(find_category)
+    df["category_group"] = [find_category(n, t) for n, t in zip(name, text)]
     df["brand"] = [find_brand(b, t) for b, t in zip(df["brand"].fillna(""), text)]
     counts = df["brand"].value_counts()
     df["brand_grouped"] = df["brand"].where(
         df["brand"].map(counts).ge(MIN_BRAND_COUNT) | df["brand"].eq("Unknown"), "Other brand")
 
     df["volume_ml"] = name.apply(lambda t: first_number(t, r"(\d+(?:\.\d+)?)\s*ml\b"))
+    # litres, e.g. "Topcoat 1L" (but not brush codes like "(113L)")
+    litres = name.apply(lambda t: first_number(t, r"(?<![\w(])(\d+(?:\.\d+)?)\s*(?:l|ltr|litres?|liters?)\b"))
+    df["volume_ml"] = df["volume_ml"].fillna(litres * 1000)
     df["weight_g"] = name.apply(extract_weight_g)
     df["paper_gsm"] = name.apply(lambda t: first_number(t, r"(\d+)\s*gsm"))
+    # on paper/canvas, "380g" means paper weight (gsm), not product weight
+    paper_g = (df["category_group"] == "Paper & Canvas") & df["paper_gsm"].isna() & df["weight_g"].notna()
+    df.loc[paper_g, "paper_gsm"] = df.loc[paper_g, "weight_g"]
+    df.loc[paper_g, "weight_g"] = np.nan
     df["paper_size"] = name.str.extract(r"\b(a[0-6])\b", expand=False).str.upper().fillna("Not stated")
     df["pack_count"] = name.apply(extract_pack_count)
     df["is_set"] = name.str.contains(r"\b(?:set|pack|kit|combo|collection|assorted)\b").astype(int)

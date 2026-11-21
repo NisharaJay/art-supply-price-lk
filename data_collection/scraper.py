@@ -221,8 +221,14 @@ def main():
     for site, n in summary.items():
         log(f"  {site:25s} {n:5d} products")
     log(f"  {'TOTAL':25s} {len(all_rows):5d} products")
-    log(f"CSV saved to: {csv_path}")
-    log(f"Log saved to: {log_path}")
+    def short(path):  # path relative to the project, so the log does not show personal folders
+        try:
+            return path.resolve().relative_to(HERE.parent)
+        except ValueError:
+            return path.name
+
+    log(f"CSV saved to: {short(csv_path)}")
+    log(f"Log saved to: {short(log_path)}")
     log_file.close()
 
 
