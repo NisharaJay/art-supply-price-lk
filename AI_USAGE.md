@@ -1,6 +1,6 @@
 # AI Usage Declaration
 
-As permitted by the lecturer, generative AI tools were used in this project. Every use is declared below.
+As permitted, generative AI tools were used in this project. Every use is declared below.
 
 | Part | AI tool | How it was used | My own work |
 |---|---|---|---|
